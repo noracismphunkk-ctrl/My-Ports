@@ -1,1 +1,115 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Gotham City Rush</title><script src="https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle"></script><style>*{box-sizing:border-box}body{margin:0;background:#080808;color:white;font-family:Arial;overflow:hidden}#s,#r{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px}h1{font-size:28px;margin:0}p{color:#aaa;margin:0}button{background:#20c55a;color:#07140b;border:0;border-radius:13px;padding:16px 45px;font-size:17px;font-weight:bold}#g{display:none;position:fixed;inset:0;background:#000}embed{width:100%;height:100%}#r{display:none;z-index:10;text-align:center;font-size:22px}@media(orientation:portrait){#r{display:flex}}</style></head><body><div id="s"><h1>Gotham City Rush</h1><p>Play in landscape mode</p><button onclick="p()">PLAY GAME</button></div><div id="g"></div><div id="r">Please rotate your device to landscape</div><script>let started=false;async function p(){if(!matchMedia("(orientation:landscape)").matches||started)return;started=true;try{await document.documentElement.requestFullscreen()}catch(e){}s.style.display="none";g.style.display="block";g.innerHTML='<embed src="https://raw.githubusercontent.com/noracismphunkk-ctrl/emulate/refs/heads/main/gotham-city-rush.swf">'}function o(){let l=matchMedia("(orientation:landscape)").matches;r.style.display=l?"none":"flex";if(!l&&started){g.style.display="none";g.innerHTML="";s.style.display="flex";started=false}}window.addEventListener("resize",o);window.addEventListener("orientationchange",o);o();</script></body></html>
+<!doctype html>
+
+<html lang="en">
+<head>
+  <title>game</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+    }
+    #flash-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: black;
+      overflow: hidden;
+    }
+    .black-box {
+      position: fixed;
+      background: black;
+      z-index: 10;
+    }
+    #box-top {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+    }
+    #box-bottom {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+    }
+    #box-left {
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+    }
+    #box-right {
+      top: 0;
+      right: 0;
+      width: 0;
+      height: 100%;
+    }
+    ruffle-player {
+      width: 100%;
+      height: 100%;
+      background: black;
+      display: block;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle@0.2.0-nightly.2025.10.2/ruffle.min.js"></script>
+</head>
+<body>
+  <div id="flash-container"></div>
+  <div class="black-box" id="box-top"></div>
+  <div class="black-box" id="box-bottom"></div>
+  <div class="black-box" id="box-left"></div>
+  <div class="black-box" id="box-right"></div>
+  <script>
+    const container = document.getElementById("flash-container");
+    const boxTop = document.getElementById("box-top");
+    const boxBottom = document.getElementById("box-bottom");
+    const boxLeft = document.getElementById("box-left");
+    const boxRight = document.getElementById("box-right");function resizeGame() {
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+  const aspectRatio = 5.5 / 3;
+  
+  let width = Math.floor(windowWidth * 1);
+  let height = Math.floor(width / aspectRatio);
+  
+  if (height > windowHeight * 1) {
+    height = Math.floor(windowHeight * 1);
+    width = Math.floor(height * aspectRatio);
+  }
+  
+  container.style.width = `${width}px`;
+  container.style.height = `${height}px`;
+  
+  const topMargin = (windowHeight - height) / 2;
+  const leftMargin = (windowWidth - width) / 2;
+  
+  boxTop.style.height = `${topMargin}px`;
+  boxBottom.style.height = `${topMargin}px`;
+  boxLeft.style.width = `${leftMargin}px`;
+  boxRight.style.width = `${leftMargin}px`;
+}
+
+window.addEventListener("resize", resizeGame);
+window.addEventListener("DOMContentLoaded", () => {
+  resizeGame();
+  const ruffle = window.RufflePlayer?.newest() || window.RufflePlayer?.createPlayer();
+  if (ruffle && container) {
+    const player = ruffle.createPlayer();
+    player.style.width = "100%";
+    player.style.height = "100%";
+    player.style.background = "black";
+    container.appendChild(player);
+    player.load("https://raw.githubusercontent.com/noracismphunkk-ctrl/emulate/refs/heads/main/gotham-city-rush.swf");
+  } else {
+    container.textContent = "Ruffle failed to load."; 
+  }
+});
+
+  </script>
+</body>
+</html>
